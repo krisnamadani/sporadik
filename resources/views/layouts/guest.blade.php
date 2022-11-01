@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>SPORADIK | ADMIN</title>
+  <title>SPORADIK</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -18,12 +18,6 @@
 
   <link rel="shortcut icon" href="{{ asset('sporadik/img/icon-16.webp') }}" type="image/x-icon">
   <link rel="favicon" href="{{ asset('sporadik/img/icon-16.webp') }}" type="image/x-icon">
-
-  <style>
-    .ttd {
-      max-width: 100%;
-    }
-  </style>
 
 </head>
 <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -59,74 +53,16 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          @if (Auth::user()->avatar != null)
-            <img src="{{ Storage::url(Auth::user()->avatar) }}" class="img-circle elevation-2">
-          @else
-            <img src="{{ asset('sporadik/img/user-icon-50.webp') }}" class="img-circle elevation-2">
-          @endif
-        </div>
-        <div class="info">
-          <a href="{{ route('admin.user.index') }}" class="d-block">{{ Auth::user()->name }}</a>
-        </div>
-      </div>
-
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ route('admin.dashboard.index' )}}" class="nav-link {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('admin.data.index' )}}" class="nav-link {{ request()->routeIs('admin.data.index') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-file-alt"></i>
-              <p>
-                Data
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('admin.jenis_kegiatan.index' )}}" class="nav-link {{ request()->routeIs('admin.jenis_kegiatan.index') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-tags"></i>
-              <p>
-                Jenis Kegiatan
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('admin.user.index' )}}" class="nav-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                User
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('logout' )}}" class="nav-link">
+            <a href="{{ route('index' )}}" class="nav-link">
               <i class="nav-icon fas fa-arrow-left"></i>
               <p>
-                Logout
+                Kembali
               </p>
             </a>
           </li>
@@ -143,7 +79,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2022</strong> - {{ Auth::user()->name }}
+    <strong>Copyright &copy; 2022</strong> - SPORADIK
   </footer>
 </div>
 <!-- ./wrapper -->

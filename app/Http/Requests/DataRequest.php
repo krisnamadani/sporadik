@@ -29,9 +29,11 @@ class DataRequest extends FormRequest
                 'nomor_pendaftaran_permohonan' => 'required',
                 'nama_identitas_alamat_penerima' => 'required',
                 'hasil_pekerjaan_yang_diterima' => 'required',
-                'jenis_kegiatan' => 'required',
+                'hasil_pekerjaan_yang_diterima.*' => 'required',
+                'jenis_kegiatan_id' => 'required',
                 'tanda_tangan_penerima' => 'required',
                 'no_seri_sertipikat' => 'required',
+                'no_seri_sertipikat.*' => 'required',
                 'keterangan' => 'required',
             ];
         } else {
@@ -40,9 +42,11 @@ class DataRequest extends FormRequest
                 'nomor_pendaftaran_permohonan' => 'required',
                 'nama_identitas_alamat_penerima' => 'required',
                 'hasil_pekerjaan_yang_diterima' => 'required',
-                'jenis_kegiatan' => 'required',
+                'hasil_pekerjaan_yang_diterima.*' => 'required',
+                'jenis_kegiatan_id' => 'required',
                 'tanda_tangan_penerima' => 'nullable',
                 'no_seri_sertipikat' => 'required',
+                'no_seri_sertipikat.*' => 'required',
                 'keterangan' => 'required',
             ];
         }

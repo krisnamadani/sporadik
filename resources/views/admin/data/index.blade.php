@@ -50,8 +50,8 @@
                     <th>Tanggal</th>
                     <th>Nomor Pendaftaran</th>
                     <th>Identitas Penerima</th>
-                    <th>Hasil Pekerjaan</th>
-                    <th>No Seri Sertipikat</th>
+                    <th>Jenis Kegiatan</th>
+                    <th>Keterangan</th>
                     <th>Aksi</th>
                   </tr>
                   </thead>
@@ -73,6 +73,58 @@
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+<div class="modal fade" id="detail-modal">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Detail Data</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanggal: <code>*</code></label>
+                  <input type="text" class="form-control" required id="detail_tanggal" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Nomor Pendaftaran Permohonan: <code>*</code></label>
+                  <input type="text" class="form-control" required id="detail_nomor_pendaftaran_permohonan" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Nama, Identitas Alamat Penerima: <code>*</code></label>
+                  <input type="text" class="form-control" required id="detail_nama_identitas_alamat_penerima" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Jenis Kegiatan <code>*</code></label>
+                  <input type="text" class="form-control" required id="detail_jenis_kegiatan" readonly>
+                </div>
+                <div id="detail-hasil-wrapper">
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                  <label>Tanda Tangan Penerima:</label>
+                  <img src="" class="ttd" id="detail_tanda_tangan_penerima">
+                </div>
+                <div class="form-group">
+                  <label>Keterangan: <code>*</code></label>
+                  <input type="text" class="form-control" required id="detail_keterangan" readonly>
+                </div>
+                <div id="detail-sertipikat-wrapper">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-end">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
 
 <div class="modal fade" id="add-modal">
   <div class="modal-dialog modal-lg">
@@ -105,16 +157,25 @@
                       <label>Nama, Identitas Alamat Penerima: <code>*</code></label>
                       <input type="text" class="form-control" name="nama_identitas_alamat_penerima" required placeholder="Masukkan nama, identitas alamat penerima">
                   </div>
-                  <div class="form-group">
+                  <div id="add-hasil-wrapper">
+                    <div class="form-group">
                       <label>Hasil Pekerjaan Yang Diterima: <code>*</code></label>
-                      <input type="text" class="form-control" name="hasil_pekerjaan_yang_diterima" required placeholder="Masukkan hasil pekerjaan yang diterima">
+                      <button type="button" class="btn btn-success btn-xs" id="add-hasil-button">&nbsp;<i class="nav-icon fas fa-plus"></i>&nbsp;</button>
+                      <input type="text" class="form-control" name="hasil_pekerjaan_yang_diterima[]" required placeholder="Masukkan hasil pekerjaan yang diterima" id="add-hasil-pekerjaan">
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>Jenis Kegiatan: <code>*</code></label>
-                    <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Masukkan jenis kegiatan">
+                    <label>Jenis Kegiatan <code>*</code></label>
+                    <select class="form-control" name="jenis_kegiatan_id" required>
+                      <option selected disabled>Pilih jenis kegiatan</option>
+                      @foreach ($jenis_kegiatan as $item)
+                        <option value="{{ $item->id }}">{{ $item->nama_kegiatan }}</option>
+                      @endforeach
+                    </select>
                   </div>
+                  
                   <div class="form-group">
                       <label>Tanda Tangan Penerima: <code>*</code></label>
                       <div class="custom-file">
@@ -123,12 +184,16 @@
                     </div>
                   </div>
                   <div class="form-group">
-                      <label>No. Seri Sertipikat: <code>*</code></label>
-                      <input type="text" class="form-control" name="no_seri_sertipikat" required placeholder="Masukkan no. seri sertipikat">
-                  </div>
-                  <div class="form-group">
                     <label>Keterangan: <code>*</code></label>
                     <input type="text" class="form-control" name="keterangan" required placeholder="Masukkan keterangan">
+                  </div>
+                  <div id="add-sertipikat-wrapper">
+                    <div class="form-group">
+                      <label>No. Seri Sertipikat: <code>*</code></label>
+                      <button type="button" class="btn btn-success btn-xs" id="add-sertipikat-button">&nbsp;<i class="nav-icon fas fa-plus"></i>&nbsp;</button>
+                      <button type="button" class="btn btn-success btn-xs" onclick="goRandom()">&nbsp;<i class="nav-icon fas fa-sync"></i>&nbsp;</button>
+                      <input type="text" class="form-control" name="no_seri_sertipikat[]" required placeholder="Masukkan no. seri sertipikat" id="add-no-seri-sertipikat">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -174,16 +239,19 @@
                         <label>Nama, Identitas Alamat Penerima: <code>*</code></label>
                         <input type="text" class="form-control" name="nama_identitas_alamat_penerima" required id="nama_identitas_alamat_penerima">
                     </div>
-                    <div class="form-group">
-                        <label>Hasil Pekerjaan Yang Diterima: <code>*</code></label>
-                        <input type="text" class="form-control" name="hasil_pekerjaan_yang_diterima" required id="hasil_pekerjaan_yang_diterima">
+                    <div id="edit-hasil-wrapper">
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                      <label>Jenis Kegiatan: <code>*</code></label>
-                      <input type="text" class="form-control" name="jenis_kegiatan" required id="jenis_kegiatan">
+                      <label>Jenis Kegiatan <code>*</code></label>
+                      <select class="form-control" name="jenis_kegiatan_id" required id="jenis_kegiatan_id">
+                        @foreach ($jenis_kegiatan as $item)
+                          <option value="{{ $item->id }}">{{ $item->nama_kegiatan }}</option>
+                        @endforeach
+                      </select>
                     </div>
+                    
                     <div class="form-group">
                         <label>Tanda Tangan Penerima:</label>
                         <div class="custom-file">
@@ -192,12 +260,10 @@
                       </div>
                     </div>
                     <div class="form-group">
-                        <label>No. Seri Sertipikat: <code>*</code></label>
-                        <input type="text" class="form-control" name="no_seri_sertipikat" required id="no_seri_sertipikat">
-                    </div>
-                    <div class="form-group">
                       <label>Keterangan: <code>*</code></label>
                       <input type="text" class="form-control" name="keterangan" required id="keterangan">
+                    </div>
+                    <div id="edit-sertipikat-wrapper">
                     </div>
                   </div>
                 </div>
@@ -249,8 +315,8 @@ $(function () {
           {data: 'tanggal', name: 'tanggal'},
           {data: 'nomor_pendaftaran_permohonan', name: 'nomor_pendaftaran_permohonan'},
           {data: 'nama_identitas_alamat_penerima', name: 'nama_identitas_alamat_penerima'},
-          {data: 'hasil_pekerjaan_yang_diterima', name: 'hasil_pekerjaan_yang_diterima'},
-          {data: 'no_seri_sertipikat', name: 'no_seri_sertipikat'},
+          {data: 'jenis_kegiatan_id', name: 'jenis_kegiatan_id'},
+          {data: 'keterangan', name: 'keterangan'},
           {
               data: 'action',
               name: 'action',
@@ -267,6 +333,127 @@ $(function () {
   });
 
   bsCustomFileInput.init();
+});
+
+function detail(id) {
+    $.ajax({
+        type:"get",
+        url: "{{ route('admin.data.detail') }}",
+        dataType: 'json',
+        data: {
+            id: id,
+        },
+        success: function(response) {
+            $('#detail_tanggal').val(response.tanggal);
+            $('#detail_nomor_pendaftaran_permohonan').val(response.nomor_pendaftaran_permohonan);
+            $('#detail_nama_identitas_alamat_penerima').val(response.nama_identitas_alamat_penerima);
+            $('#detail_jenis_kegiatan').val(response.jenis_kegiatan.nama_kegiatan);
+            $('#detail_tanda_tangan_penerima').attr("src", response.tanda_tangan_penerima);
+            $('#detail_keterangan').val(response.keterangan);
+            
+            $('#detail-hasil-wrapper').empty();
+            let n = 1;
+            response.hasil_pekerjaan.forEach(function (item, index) {
+              $('#detail-hasil-wrapper').append('<div class="form-group"><label>Hasil Pekerjaan Yang Diterima ' + n++ + ':</label><input type="text" class="form-control" value="' + item.hasil_pekerjaan_yang_diterima + '" readonly></div>');
+            });
+
+            $('#detail-sertipikat-wrapper').empty();
+            let m = 1;
+            response.sertipikat.forEach(function (item, index) {
+              $('#detail-sertipikat-wrapper').append('<div class="form-group"><label>No. Seri Sertipikat ' + m++ + ':</label><input type="text" class="form-control" value="' + item.no_seri_sertipikat + '" readonly></div>');
+            });
+
+            $('#detail-modal').modal('show');
+        }
+    });
+}
+
+function makeletter(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function makenumber(length) {
+    var result           = '';
+    var characters       = '0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function incrementString(str) {
+  var count = str.match(/\d*$/);
+  return str.substr(0, count.index) + (++count[0]);
+};
+
+function goRandom() {
+  $('#add-no-seri-sertipikat').val(makeletter(2) + makenumber(7));
+}
+
+function goRandom2() {
+  $('#edit-no-seri-sertipikat').val(makeletter(2) + makenumber(7));
+}
+
+$(document).ready(function() {
+  let x = 1;
+
+  $('#add-hasil-button').click(function() {
+    let last = $('#add-hasil-wrapper .form-group:last-child').children('.form-control').val();
+    let hasil = "";
+
+    if(last != "") {
+      let pisahHasil = last.split(".");
+      let pisahHasil2 = pisahHasil[1].split("/");
+      hasil = pisahHasil[0] + '.' + ++pisahHasil2[0] + '/' + pisahHasil2[1];
+    }
+
+    let addHasilHTML = '<div class="form-group"><label>Hasil Pekerjaan Yang Diterima ' + ++x + ': <code>*</code></label> <button type="button" class="btn btn-danger btn-xs" id="remove-hasil-button">&nbsp;<i class="nav-icon fas fa-minus"></i>&nbsp;</button><input type="text" class="form-control" name="hasil_pekerjaan_yang_diterima[]" required placeholder="Masukkan hasil pekerjaan yang diterima" value="' + hasil + '"></div>';
+    
+    $('#add-hasil-wrapper').append(addHasilHTML);
+  });
+
+  $('#add-hasil-wrapper').on('click', '#remove-hasil-button', function(e){
+    $(this).parent('div').remove();
+    x--;
+  });
+
+
+  let y = 1;
+
+  $('#add-sertipikat-button').click(function() {
+    let last = $('#add-sertipikat-wrapper .form-group:last-child').children('.form-control').val();
+    let hasil = "";
+
+    if(last != "") {
+      hasil = incrementString(last);
+    }
+
+    let addSertipikatHTML = '<div class="form-group"><label>No. Seri Sertipikat ' + ++y + ': <code>*</code></label> <button type="button" class="btn btn-danger btn-xs" id="remove-hasil-button">&nbsp;<i class="nav-icon fas fa-minus"></i>&nbsp;</button><input type="text" class="form-control" name="no_seri_sertipikat[]" required placeholder="Masukkan no. seri sertipikat" value="' + hasil + '"></div>';
+    
+    $('#add-sertipikat-wrapper').append(addSertipikatHTML);
+  });
+
+  $('#add-sertipikat-wrapper').on('click', '#remove-hasil-button', function(e){
+      $(this).parent('div').remove();
+      y--;
+  });
+
+  // edit
+
+  $('#edit-hasil-wrapper').on('click', '#remove-seri-button', function(e){
+      $(this).parent('div').remove();
+  });
+  $('#edit-sertipikat-wrapper').on('click', '#remove-seri-button', function(e){
+      $(this).parent('div').remove();
+  });
+
 });
 
 $('#add-form').submit(function(event) {
@@ -325,9 +512,26 @@ function edit(id) {
             });
             $('#nomor_pendaftaran_permohonan').val(response.nomor_pendaftaran_permohonan);
             $('#nama_identitas_alamat_penerima').val(response.nama_identitas_alamat_penerima);
-            $('#hasil_pekerjaan_yang_diterima').val(response.hasil_pekerjaan_yang_diterima);
-            $('#jenis_kegiatan').val(response.jenis_kegiatan);
-            $('#no_seri_sertipikat').val(response.no_seri_sertipikat);
+            // $('#hasil_pekerjaan_yang_diterima').val(response.hasil_pekerjaan_yang_diterima);
+            
+            $('#edit-hasil-wrapper').empty();
+            let n = 1;
+            response.hasil_pekerjaan.forEach(function (item, index) {
+              let editHasilHTML = "";
+              editHasilHTML = '<div class="form-group"><label>Hasil Pekerjaan Yang Diterima ' + n++ + ': <code>*</code></label> <button type="button" class="btn btn-danger btn-xs" id="remove-seri-button">&nbsp;<i class="nav-icon fas fa-minus"></i>&nbsp;</button><input type="text" class="form-control" name="hasil_pekerjaan_yang_diterima[]" required value="' + item.hasil_pekerjaan_yang_diterima + '"></div>';
+              $('#edit-hasil-wrapper').append(editHasilHTML);
+            });
+
+            $('#jenis_kegiatan_id').val(response.jenis_kegiatan_id);
+            // $('#no_seri_sertipikat').val(response.no_seri_sertipikat);
+
+            $('#edit-sertipikat-wrapper').empty();
+            let v = 1;
+            response.sertipikat.forEach(function (item, index) {
+              let editSertipikatHTML = "";
+              editSertipikatHTML = '<div class="form-group"><label>No. Seri Sertipikat ' + v++ + ': <code>*</code></label> <button type="button" class="btn btn-danger btn-xs" id="remove-seri-button">&nbsp;<i class="nav-icon fas fa-minus"></i>&nbsp;</button><input type="text" class="form-control" name="no_seri_sertipikat[]" required value="' + item.no_seri_sertipikat + '"></div>';
+              $('#edit-sertipikat-wrapper').append(editSertipikatHTML);
+            });
             $('#keterangan').val(response.keterangan);
             $('#edit-modal').modal('show');
         }

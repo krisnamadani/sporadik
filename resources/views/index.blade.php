@@ -3,7 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="author" content="colorlib.com">
+    <title>SPORADIK</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700" rel="stylesheet" />
     <link href="{{ asset('search/css/main.css') }}" rel="stylesheet" />
     
@@ -43,6 +43,7 @@
             </div>
           </div>
           <button class="btn-search" type="submit">CARI</button>
+          <button class="btn-search" type="button" onclick="window.location.href='/form'">TAMBAH</button>
         </div>
         @if (isset($results))
           <h4 class="text-light mt-4 mb-2">Hasil Pencarian</h4>
@@ -63,15 +64,23 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($results as $data)
+                    @foreach($results as $data)
                       <tr>
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>{{ $data->tanggal }}</td>
                         <td>{{ $data->nomor_pendaftaran_permohonan }}</td>
                         <td>{{ $data->nama_identitas_alamat_penerima }}</td>
-                        <td>{{ $data->hasil_pekerjaan_yang_diterima }}</td>
-                        <td>{{ $data->jenis_kegiatan }}</td>
-                        <td>{{ $data->no_seri_sertipikat }}</td>
+                        <td>
+                          @foreach($data->hasil_pekerjaan as $item)
+                            <li>{{ $item->hasil_pekerjaan_yang_diterima }}</li>
+                          @endforeach
+                        </td>
+                        <td>{{ $data->jenis_kegiatan->nama_kegiatan }}</td>
+                        <td>
+                          @foreach($data->sertipikat as $item)
+                            <li>{{ $item->no_seri_sertipikat }}</li>
+                          @endforeach
+                        </td>
                         <td>{{ $data->keterangan }}</td>
                       </tr>
                     @endforeach

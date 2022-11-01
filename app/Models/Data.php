@@ -16,4 +16,19 @@ class Data extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function jenis_kegiatan()
+    {
+        return $this->belongsTo(JenisKegiatan::class);
+    }
+
+    public function hasil_pekerjaan()
+    {
+        return $this->hasMany(HasilPekerjaan::class);
+    }
+
+    public function sertipikat()
+    {
+        return $this->hasMany(Sertipikat::class);
+    }
 }

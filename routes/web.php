@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DataController;
+use App\Http\Controllers\Admin\JenisKegiatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,9 @@ use App\Http\Controllers\Admin\DataController;
 */
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
+
+Route::get('/form', [IndexController::class, 'form'])->name('form');
+Route::post('/form', [IndexController::class, 'store'])->name('form.store');
 
 Route::controller(LoginController::class)->group(function ()
 {
@@ -37,9 +41,23 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function ()
     Route::controller(DashboardController::class)->prefix('dashboard')->name('dashboard.')->group(function ()
     {
         Route::get('/', 'index')->name('index');
+        Route::get('/data', 'data')->name('data');
+        Route::post('/verification', 'verification')->name('verification');
+        Route::get('/detail', 'detail')->name('detail');
     });
 
     Route::controller(DataController::class)->prefix('data')->name('data.')->group(function ()
+    {
+        Route::get('/', 'index')->name('index');
+        Route::get('/data', 'data')->name('data');
+        Route::get('/detail', 'detail')->name('detail');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit', 'edit')->name('edit');
+        Route::put('/update', 'update')->name('update');
+        Route::delete('/delete', 'delete')->name('delete');
+    });
+
+    Route::controller(JenisKegiatanController::class)->prefix('jenis_kegiatan')->name('jenis_kegiatan.')->group(function ()
     {
         Route::get('/', 'index')->name('index');
         Route::get('/data', 'data')->name('data');
